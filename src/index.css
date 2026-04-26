@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+#root {
+  --anim-speed: 1s;
+  --anim-height: 498px;
+  --anim-width: 387px;
+  --anim-frames: 15;
+}
+
+.timer {
+  font-weight: bold;
+  font-size: xx-large;
+  font-family: monospace;
+}
+
+.timer-anim {
+  background: url("assets/spritesheet.png");
+  cursor: default;
+  display: inline-block;
+  height: var(--anim-height);
+  width: var(--anim-width);
+  animation: timer var(--anim-speed) steps(var(--anim-frames)) infinite;
+  animation-play-state: paused;
+}
+.timer-anim.play {
+  animation-play-state: running;
+}
+
+@keyframes timer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 calc(-1 * var(--anim-frames) * var(--anim-height));
+  }
+}
