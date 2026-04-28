@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, test, vi } from "vitest";
-import { Stopwatch, Timer, iso8601DurationToMilliseconds } from "./utils";
+import { Stopwatch, Timer, iso8601DurationToMilliseconds } from "@/lib/utils";
 
 test.each([
   ["PT0.2S", 200],

@@ -1,5 +1,5 @@
 import React from "react";
-import { useTimer } from "./use-timer";
+import { useTimer } from "@/hooks/use-timer";
 
 function App() {
   let [enabled, setEnabled] = React.useState(false);

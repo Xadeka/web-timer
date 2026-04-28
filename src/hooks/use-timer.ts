@@ -1,5 +1,5 @@
 import React from "react";
-import { Timer } from "./utils";
+import { Timer } from "@/lib/utils";
 
 export function useTimer(ms: number, enabled: boolean = true): Timer {
   let timer = React.useRef(new Timer(ms)).current;
