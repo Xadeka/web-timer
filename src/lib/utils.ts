@@ -72,6 +72,10 @@ export class Timer extends Stopwatch {
   }
 
   get current(): number {
+    if (super.current >= this.total) {
+      super.pause();
+      return 0;
+    }
     return this.total - super.current;
   }
 }
