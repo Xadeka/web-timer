@@ -2,6 +2,7 @@ import React from "react";
 import { useTimer } from "@/hooks/use-timer";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Progress } from "./ui/progress";
 
 type AnimationProps = {
   enabled?: boolean;
@@ -13,7 +14,8 @@ function Animation(props: AnimationProps) {
 
 function App() {
   let [enabled, setEnabled] = React.useState(false);
-  let timer = useTimer(30 * 60 * 1000, enabled);
+  let total = 30 * 60 * 1000;
+  let timer = useTimer(total, enabled);
   return (
     <div className="flex flex-col justify-evenly gap-2 p-2">
       <Button
@@ -27,6 +29,7 @@ function App() {
         <Animation enabled={enabled} />
         <p className="font-mono text-8xl font-extrabold">{timer.format()}</p>
       </div>
+      <Progress min={0} max={total} value={total - timer.current} />
     </div>
   );
 }
