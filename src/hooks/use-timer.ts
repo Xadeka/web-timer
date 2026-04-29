@@ -1,25 +1,41 @@
 import React from "react";
 import { Timer } from "@/lib/utils";
 
-export function useTimer(ms: number, enabled: boolean = true): Timer {
-  let timer = React.useRef(new Timer(ms)).current;
-  let [_, setTime] = React.useState(timer.current);
+type UseTimerResult = {
+  reset: () => void;
+  format: () => string;
+  current: number;
+};
+
+export function useTimer(ms: number, enabled: boolean = true): UseTimerResult {
+  let timer = React.useRef(new Timer(ms));
+  let [time, setTime] = React.useState(0);
 
   React.useEffect(() => {
     if (!enabled) {
       return;
     }
 
-    timer.start();
+    timer.current.start();
     let handle = setInterval(() => {
-      setTime(timer.current);
+      setTime(timer.current.current);
     }, 10);
 
     return () => {
-      timer.pause();
+      timer.current.pause();
       clearInterval(handle);
     };
   }, [enabled]);
 
-  return timer;
+  return {
+    reset: React.useCallback(
+      function reset() {
+        timer.current.reset();
+        setTime(ms);
+      },
+      [timer, ms],
+    ),
+    format: timer.current.format,
+    current: time,
+  };
 }
