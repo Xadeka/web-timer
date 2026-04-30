@@ -9,7 +9,7 @@ type UseTimerResult = {
 
 export function useTimer(ms: number, enabled: boolean = true): UseTimerResult {
   let timer = React.useRef(new Timer(ms));
-  let [time, setTime] = React.useState(0);
+  let [time, setTime] = React.useState(ms);
 
   React.useEffect(() => {
     if (!enabled) {

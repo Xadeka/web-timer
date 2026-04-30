@@ -37,7 +37,7 @@ function App() {
         <Animation enabled={enabled && timer.current > 0} />
         <p className="font-mono text-8xl font-extrabold">{timer.format()}</p>
       </div>
-      <Progress min={0} max={total} value={total - timer.current} />
+      <Progress min={total} max={0} value={timer.current} />
     </div>
   );
 }
