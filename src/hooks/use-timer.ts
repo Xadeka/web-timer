@@ -8,7 +8,7 @@ type UseTimerResult = {
 };
 
 export function useTimer(ms: number, enabled: boolean = true): UseTimerResult {
-  let timer = React.useRef(new Timer(ms));
+  let [timer] = React.useState(new Timer(ms));
   let [time, setTime] = React.useState(ms);
 
   React.useEffect(() => {
@@ -16,26 +16,26 @@ export function useTimer(ms: number, enabled: boolean = true): UseTimerResult {
       return;
     }
 
-    timer.current.start();
+    timer.start();
     let handle = setInterval(() => {
-      setTime(timer.current.current);
+      setTime(timer.current);
     }, 10);
 
     return () => {
-      timer.current.pause();
+      timer.pause();
       clearInterval(handle);
     };
-  }, [enabled]);
+  }, [timer, enabled]);
 
   return {
     reset: React.useCallback(
       function reset() {
-        timer.current.reset();
+        timer.reset();
         setTime(ms);
       },
       [timer, ms],
     ),
-    format: timer.current.format,
+    format: timer.format,
     current: time,
   };
 }
