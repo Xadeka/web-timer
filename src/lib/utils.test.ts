@@ -108,7 +108,7 @@ describe("Timer", () => {
     expect(timer.current).toStrictEqual(4000);
   });
 
-  it("stops counting once complete", ()=> {
+  it("stops counting once complete", () => {
     timer.start();
     vi.advanceTimersByTime(6000);
     expect(timer.current).toStrictEqual(0);
