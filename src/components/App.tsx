@@ -1,10 +1,21 @@
 import React from "react";
 import { useTimer } from "@/hooks/use-timer";
 import { cn } from "@/lib/utils";
-import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
+import {
+  ChevronRightIcon,
+  PauseIcon,
+  PlayIcon,
+  RotateCcwIcon,
+} from "lucide-react";
 import { CreateTimerForm } from "@/components/CreateTimerForm";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemTitle,
+} from "@/components/ui/item";
 
 type AnimationProps = {
   enabled?: boolean;
@@ -49,15 +60,46 @@ function RoundTimer(props: RoundTimerProps) {
   );
 }
 
+type PresetTimerItemProps = {
+  minutes: number;
+  onClick: React.MouseEventHandler;
+};
+
+function PresetTimerItem(props: PresetTimerItemProps) {
+  return (
+    <Item
+      variant="outline"
+      className="hover:bg-accent"
+      onClick={props.onClick}
+      render={<button />}
+    >
+      <ItemContent>
+        <ItemTitle>{props.minutes} minutes</ItemTitle>
+      </ItemContent>
+      <ItemActions>
+        <ChevronRightIcon className="size-4" />
+      </ItemActions>
+    </Item>
+  );
+}
+
 function App() {
   let [ms, setMs] = React.useState(0);
+  let setTime = (minutes: number, seconds: number) => {
+    setMs(minutes * 60 * 1000 + seconds * 1000);
+  };
   if (ms <= 0) {
     return (
-      <div className="p-10">
+      <div className="mx-auto flex max-w-xl flex-col gap-2 p-10">
+        <span>Select a preset</span>
+        <div className="flex flex-col gap-2">
+          <PresetTimerItem minutes={30} onClick={() => setTime(30, 0)} />
+          <PresetTimerItem minutes={50} onClick={() => setTime(50, 0)} />
+        </div>
+        <span className="mx-auto my-2">or</span>
         <CreateTimerForm
-          className="mx-auto max-w-xl"
           onSubmit={(data) => {
-            setMs(data.minutes * 60 * 1000 + data.seconds * 1000);
+            setTime(data.minutes, data.seconds);
           }}
         />
       </div>
