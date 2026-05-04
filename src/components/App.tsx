@@ -65,7 +65,7 @@ function RoundTimer(props: RoundTimerProps) {
         <Animation enabled={enabled && timer.current > 0} />
         <p className="font-mono text-8xl font-extrabold">{timer.format()}</p>
       </div>
-      <Progress min={props.ms} max={0} value={timer.current} />
+      <Progress min={props.ms} max={0} value={timer.current} animate={false} />
     </div>
   );
 }
