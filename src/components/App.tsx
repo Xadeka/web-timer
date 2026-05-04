@@ -1,9 +1,10 @@
 import React from "react";
 import { useTimer } from "@/hooks/use-timer";
 import { cn } from "@/lib/utils";
+import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
+import { CreateTimerForm } from "@/components/CreateTimerForm";
 import { Button } from "@/components/ui/button";
-import { Progress } from "./ui/progress";
-import { PlayIcon, PauseIcon, RotateCcwIcon } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 type AnimationProps = {
   enabled?: boolean;
@@ -13,12 +14,15 @@ function Animation(props: AnimationProps) {
   return <div className={cn("timer-anim", props.enabled ? "play" : null)} />;
 }
 
-function App() {
+type RoundTimerProps = {
+  ms: number;
+};
+
+function RoundTimer(props: RoundTimerProps) {
   let [enabled, setEnabled] = React.useState(false);
-  let total = 30 * 60 * 1000;
-  let timer = useTimer(total, enabled);
+  let timer = useTimer(props.ms, enabled);
   return (
-    <div className="flex flex-col justify-evenly gap-2 p-2">
+    <div className="flex flex-col gap-2 bg-green-600 p-2">
       <div role="group" className="self-center">
         <Button onClick={() => setEnabled(true)} disabled={enabled}>
           <PlayIcon />
@@ -28,7 +32,10 @@ function App() {
           <PauseIcon />
           Pause
         </Button>
-        <Button onClick={() => timer.reset()} disabled={timer.current == total}>
+        <Button
+          onClick={() => timer.reset()}
+          disabled={timer.current == props.ms}
+        >
           <RotateCcwIcon />
           Reset
         </Button>
@@ -37,9 +44,26 @@ function App() {
         <Animation enabled={enabled && timer.current > 0} />
         <p className="font-mono text-8xl font-extrabold">{timer.format()}</p>
       </div>
-      <Progress min={total} max={0} value={timer.current} />
+      <Progress min={props.ms} max={0} value={timer.current} />
     </div>
   );
+}
+
+function App() {
+  let [ms, setMs] = React.useState(0);
+  if (ms <= 0) {
+    return (
+      <div className="p-10">
+        <CreateTimerForm
+          className="mx-auto max-w-xl"
+          onSubmit={(data) => {
+            setMs(data.minutes * 60 * 1000 + data.seconds * 1000);
+          }}
+        />
+      </div>
+    );
+  }
+  return <RoundTimer ms={ms} />;
 }
 
 export default App;
