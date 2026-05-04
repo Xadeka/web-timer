@@ -2,6 +2,7 @@ import React from "react";
 import { useTimer } from "@/hooks/use-timer";
 import { cn } from "@/lib/utils";
 import {
+  ArrowLeftIcon,
   ChevronRightIcon,
   PauseIcon,
   PlayIcon,
@@ -16,6 +17,7 @@ import {
   ItemContent,
   ItemTitle,
 } from "@/components/ui/item";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 type AnimationProps = {
   enabled?: boolean;
@@ -27,6 +29,7 @@ function Animation(props: AnimationProps) {
 
 type RoundTimerProps = {
   ms: number;
+  onBackClick: React.MouseEventHandler;
 };
 
 function RoundTimer(props: RoundTimerProps) {
@@ -34,16 +37,23 @@ function RoundTimer(props: RoundTimerProps) {
   let timer = useTimer(props.ms, enabled);
   return (
     <div className="flex flex-col gap-2 bg-green-600 p-2">
-      <div role="group" className="self-center">
-        <Button onClick={() => setEnabled(true)} disabled={enabled}>
-          <PlayIcon />
-          Start
+      <div className="grid grid-cols-3">
+        <Button className="me-auto" onClick={props.onBackClick}>
+          <ArrowLeftIcon />
+          Back
         </Button>
-        <Button onClick={() => setEnabled(false)} disabled={!enabled}>
-          <PauseIcon />
-          Pause
-        </Button>
+        <ButtonGroup className="mx-auto">
+          <Button onClick={() => setEnabled(true)} disabled={enabled}>
+            <PlayIcon />
+            Start
+          </Button>
+          <Button onClick={() => setEnabled(false)} disabled={!enabled}>
+            <PauseIcon />
+            Pause
+          </Button>
+        </ButtonGroup>
         <Button
+          className="ms-auto"
           onClick={() => timer.reset()}
           disabled={timer.current == props.ms}
         >
@@ -105,7 +115,14 @@ function App() {
       </div>
     );
   }
-  return <RoundTimer ms={ms} />;
+  return (
+    <RoundTimer
+      ms={ms}
+      onBackClick={() => {
+        setMs(0);
+      }}
+    />
+  );
 }
 
 export default App;
